@@ -1,0 +1,41 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["airbnb", "eslint:recommended", "plugin:eslint-plugin/recommended", "plugin:n/recommended"],
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "plugins": ["eslint-plugin", "n"],
+  "rules": {
+    "array-bracket-newline": ["error", "consistent"],
+    "brace-style": ["error", "1tbs", { "allowSingleLine": false }],
+    "camelcase": ["error", { "allow": ["^UNSAFE_"] }],
+    "class-methods-use-this": ["off"],
+    "comma-dangle": ["error", "always-multiline"],
+    "curly": ["error", "all"],
+    "func-names": ["off"],
+    "function-call-argument-newline": ["error", "consistent"],
+    "function-paren-newline": ["error", "multiline"],
+    "global-require": ["off"],
+    "guard-for-in": ["off"],
+    "indent": ["error", 4, {"SwitchCase": 1}],
+    "max-len": ["error", { "code": 140, "ignoreStrings": true, "ignoreTemplateLiterals": true }],
+    "newline-per-chained-call": ["off"],
+    "no-continue": ["off"],
+    "no-param-reassign": ["off"],
+    "no-restricted-syntax": ["off"],
+    "no-underscore-dangle": ["off"],
+    "no-use-before-define": ["off"],
+    "object-curly-newline": ["error", { "consistent": true, "multiline": true }],
+    "object-shorthand": ["off"],
+    "padding-line-between-statements": [
+        "error",
+        { "blankLine": "always", "prev": "*", "next": "return" },
+        { "blankLine": "always", "prev": "*", "next": "block-like" },
+        { "blankLine": "always", "prev": "block-like", "next": "*" },
+        { "blankLine": "always", "prev": ["const", "let", "var"], "next": "*"},
+        { "blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"]}
+    ]
+  }
+}
