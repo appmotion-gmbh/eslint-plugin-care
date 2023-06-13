@@ -1,4 +1,4 @@
-const RuleTester = require('eslint').RuleTester;
+const { RuleTester } = require('eslint');
 const rule = require('../rules/jsx-no-padded-elements');
 
 const ruleTester = new RuleTester({

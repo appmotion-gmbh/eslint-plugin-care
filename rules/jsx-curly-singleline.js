@@ -14,10 +14,10 @@ module.exports = {
         JSXExpressionContainer: (node) => {
             if (
                 node.parent.type === 'JSXElement'
-                    && (
-                        node.loc.start.line !== node.expression.loc.start.line
-                        || node.loc.end.line !== node.expression.loc.end.line
-                    )
+                && (
+                    node.loc.start.line !== node.expression.loc.start.line
+                    || node.loc.end.line !== node.expression.loc.end.line
+                )
             ) {
                 context.report({
                     node,

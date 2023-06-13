@@ -19,6 +19,7 @@
     "function-paren-newline": ["error", "multiline"],
     "global-require": ["off"],
     "guard-for-in": ["off"],
+    "import/no-extraneous-dependencies": ["off"],
     "indent": ["error", 4, {"SwitchCase": 1}],
     "max-len": ["error", { "code": 140, "ignoreStrings": true, "ignoreTemplateLiterals": true }],
     "newline-per-chained-call": ["off"],
