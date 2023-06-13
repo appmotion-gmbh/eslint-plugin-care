@@ -1,3 +1,46 @@
-@page
-    size: A4
-    margin: 0 0
+.test
+    border: 1px solid #ffffff
+    color: black
+
+    &__foo
+        color: black
+
+    &__element,
+    &__element-two
+        color: black
+
+        &--mod
+            color: black
+
+            .test__something.test__something-else,
+            .test__something-more &
+                color: black
+
+                &.test__bar
+                    color: black
+
+    &__element-three
+        .child
+            color: black
+
+    &__element-four
+        color: black
+
+        .child
+            &__foo
+                color: black
+
+    &__element-five
+        @include something
+
+    &__element-six
+        &::before
+            color: black
+
+.a,
+.b
+    color: black
+
+.rule-without-declarations
+    &__foo
+        color: black

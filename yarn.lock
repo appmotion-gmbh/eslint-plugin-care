@@ -1686,10 +1686,10 @@ picocolors@^1.0.0:
   resolved "https://registry.yarnpkg.com/picocolors/-/picocolors-1.0.0.tgz#cb5bdc74ff3f51892236eaf79d68bc44564ab81c"
   integrity sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==
 
-postcss-sass-2@0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/postcss-sass-2/-/postcss-sass-2-0.6.1.tgz#799b22a2f6cd0b3857c90d8f7f6bbd6ee8e3fa5e"
-  integrity sha512-y7r+B2O5yGUqna+urV+bh7+RPyWnwubcQqKHuoa885jYIPGiQ4t2S7WlHSvsa1byEOtQ5RqB35bI2f8NkfbelQ==
+postcss-sass-2@0.9.4:
+  version "0.9.4"
+  resolved "https://registry.yarnpkg.com/postcss-sass-2/-/postcss-sass-2-0.9.4.tgz#840eb0a7c5a76fa1f36ab61cff03237aa54bc4e5"
+  integrity sha512-9l+MNm0d374j7Nv14TDbzbRTea4/gLu9i8alnJqT8DIvQ8TL/jL0XH7cKZ/hEQSw5uLaanpj/voMaJJ/VAstUA==
   dependencies:
     gonzales-pe "^4.3.0"
     postcss "^8.3.7"

@@ -113,7 +113,7 @@ module.exports = {
                 }
 
                 const sass = fs.readFileSync(`${context.cwd}/${sassDirectory}`, { encoding: 'utf8' });
-                const result = postcss().process(sass, { syntax: postcssSass });console.log(result.root.nodes[0])
+                const result = postcss().process(sass, { syntax: postcssSass });
                 let classNames = [];
 
                 result.root.walkRules((rule) => {
