@@ -1,7 +1,6 @@
 module.exports = {
     meta: {
         name: 'eslint-plugin-care',
-        version: '1.0.0',
     },
     rules: {
         'chained-call-newline': require('./rules/chained-call-newline'),
@@ -15,6 +14,7 @@ module.exports = {
         'jsx-no-padded-elements': require('./rules/jsx-no-padded-elements'),
         'jsx-one-element-per-line': require('./rules/jsx-one-element-per-line'),
         'jsx-root-newline': require('./rules/jsx-root-newline'),
+        'multiline-function-parens': require('./rules/multiline-function-parens'),
         'multiline-ternary-parens': require('./rules/multiline-ternary-parens'),
         'no-single-line-function-declaration': require('./rules/no-single-line-function-declaration'),
         'prefer-async-await': require('./rules/prefer-async-await'),
