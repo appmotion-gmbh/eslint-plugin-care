@@ -40,6 +40,30 @@ ruleTester.run('multiline-function-parens', rule, {
                 stuff()
             ), param2);
         `,
+    }, {
+        code: `
+            someFunction({
+                someKey: 'someValue',
+            });
+        `,
+    }, {
+        code: `
+            someFunction({
+                someKey: 'someValue',
+            }, param2);
+        `,
+    }, {
+        code: `
+            someFunction([
+                'someValue',
+            ]);
+        `,
+    }, {
+        code: `
+            someFunction([
+                'someValue',
+            ], param2);
+        `,
     }],
     invalid: [{
         code: `

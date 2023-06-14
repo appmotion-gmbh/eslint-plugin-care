@@ -12,11 +12,12 @@ module.exports = {
     },
     create: (context) => ({
         CallExpression: (node) => {
-            const hasMultiLineArguments = node.arguments.some((argument) => (
-                argument.type !== 'ArrowFunctionExpression' && argument.loc.start.line !== argument.loc.end.line
+            const exceptions = ['ArrowFunctionExpression', 'ObjectExpression', 'ArrayExpression'];
+            const multiLineArgumentCount = node.arguments.some((argument) => (
+                !exceptions.includes(argument.type) && argument.loc.start.line !== argument.loc.end.line
             ));
-            const multiLineArrowFunctionArgumentCount = node.arguments.filter((argument) => (
-                argument.type === 'ArrowFunctionExpression' && argument.loc.start.line !== argument.loc.end.line
+            const exceptionMultiLineArgumentCount = node.arguments.filter((argument) => (
+                exceptions.includes(argument.type) && argument.loc.start.line !== argument.loc.end.line
             )).length;
             const argumentsWithLineBreakCount = node.arguments.filter((argument, index) => (
                 argument.loc.start.line > (node.arguments[index - 1] || node.callee).loc.end.line
@@ -28,10 +29,10 @@ module.exports = {
                 argumentsWithoutLineBreakCount > 0
                 && (
                     argumentsWithLineBreakCount > 0
-                    || hasMultiLineArguments
-                    || multiLineArrowFunctionArgumentCount > 1
+                    || multiLineArgumentCount > 0
+                    || exceptionMultiLineArgumentCount > 1
                     || (
-                        multiLineArrowFunctionArgumentCount > 0
+                        exceptionMultiLineArgumentCount > 0
                         && argumentsWithoutLineBreakCount > 2
                     )
                 )
