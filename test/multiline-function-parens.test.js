@@ -28,6 +28,18 @@ ruleTester.run('multiline-function-parens', rule, {
                     .param
             );
         `,
+    }, {
+        code: `
+            someFunction((callbackParam) => (
+                stuff()
+            ));
+        `,
+    }, {
+        code: `
+            someFunction((callbackParam) => (
+                stuff()
+            ), param2);
+        `,
     }],
     invalid: [{
         code: `
@@ -63,6 +75,23 @@ param3
     }, {
         code: `
             someFunction(some
+                .multiline
+                .param
+            );
+        `,
+        output: `
+            someFunction(
+                            some
+                .multiline
+                .param
+                        );
+        `,
+        errors: [{
+            messageId: 'invalidLineBreaks',
+        }],
+    }, {
+        code: `
+            someFunction(some
                 .multiline.param, param2);
         `,
         output: `
@@ -70,6 +99,45 @@ param3
                             some
                 .multiline.param,
 param2
+                        );
+        `,
+        errors: [{
+            messageId: 'invalidLineBreaks',
+        }],
+    }, {
+        code: `
+            someFunction((callbackParam) => (
+                stuff()
+            ), param2, param3);
+        `,
+        output: `
+            someFunction(
+                            (callbackParam) => (
+                stuff()
+            ),
+param2,
+param3
+                        );
+        `,
+        errors: [{
+            messageId: 'invalidLineBreaks',
+        }],
+    }, {
+        code: `
+            someFunction((callbackParam) => (
+                stuff()
+            ), (callbackParam) => (
+                stuff()
+            ));
+        `,
+        output: `
+            someFunction(
+                            (callbackParam) => (
+                stuff()
+            ),
+(callbackParam) => (
+                stuff()
+            )
                         );
         `,
         errors: [{

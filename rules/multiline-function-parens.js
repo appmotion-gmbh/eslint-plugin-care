@@ -13,16 +13,31 @@ module.exports = {
     create: (context) => ({
         CallExpression: (node) => {
             const hasMultiLineArguments = node.arguments.some((argument) => (
-                argument.loc.start.line !== argument.loc.end.line
+                argument.type !== 'ArrowFunctionExpression' && argument.loc.start.line !== argument.loc.end.line
             ));
-            const hasArgumentsWithLineBreak = node.arguments.some((argument, index) => (
+            const multiLineArrowFunctionArgumentCount = node.arguments.filter((argument) => (
+                argument.type === 'ArrowFunctionExpression' && argument.loc.start.line !== argument.loc.end.line
+            )).length;
+            const argumentsWithLineBreakCount = node.arguments.filter((argument, index) => (
                 argument.loc.start.line > (node.arguments[index - 1] || node.callee).loc.end.line
-            ));
-            const hasArgumentsWithoutLineBreak = node.arguments.some((argument, index) => (
+            )).length;
+            const argumentsWithoutLineBreakCount = node.arguments.filter((argument, index) => (
                 argument.loc.start.line === (node.arguments[index - 1] || node.callee).loc.end.line
-            ));
+            )).length;
+            const hasError = (
+                argumentsWithoutLineBreakCount > 0
+                && (
+                    argumentsWithLineBreakCount > 0
+                    || hasMultiLineArguments
+                    || multiLineArrowFunctionArgumentCount > 1
+                    || (
+                        multiLineArrowFunctionArgumentCount > 0
+                        && argumentsWithoutLineBreakCount > 2
+                    )
+                )
+            );
 
-            if (hasArgumentsWithoutLineBreak && (hasArgumentsWithLineBreak || hasMultiLineArguments)) {
+            if (hasError) {
                 context.report({
                     node,
                     messageId: 'invalidLineBreaks',
