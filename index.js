@@ -14,6 +14,7 @@ module.exports = {
         'jsx-no-padded-elements': require('./rules/jsx-no-padded-elements'),
         'jsx-one-element-per-line': require('./rules/jsx-one-element-per-line'),
         'jsx-root-newline': require('./rules/jsx-root-newline'),
+        'logical-indent': require('./rules/logical-indent'),
         'multiline-function-parens': require('./rules/multiline-function-parens'),
         'multiline-ternary-parens': require('./rules/multiline-ternary-parens'),
         'no-single-line-function-declaration': require('./rules/no-single-line-function-declaration'),
