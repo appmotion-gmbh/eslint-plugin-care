@@ -99,8 +99,8 @@ ruleTester.run('no-single-line-function-declaration', rule, {
         `,
         output: `
             const func = () => {
-        someCode();
-    };
+            someCode();
+        };
         `,
         errors: [{
             messageId: 'singleLineFunctionDeclaration',
@@ -113,6 +113,22 @@ ruleTester.run('no-single-line-function-declaration', rule, {
             export default () => (
         someCode()
     );
+        `,
+        errors: [{
+            messageId: 'singleLineFunctionDeclaration',
+        }],
+    }, {
+        code: `
+            list.map((item) => someFunc(() => {
+                someCode();
+            }));
+        `,
+        output: `
+            list.map((item) => (
+        someFunc(() => {
+                someCode();
+            })
+    ));
         `,
         errors: [{
             messageId: 'singleLineFunctionDeclaration',

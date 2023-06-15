@@ -1,15 +1,27 @@
-const fixBlock = (context, node) => (fixer) => (
-    fixer.replaceText(node, `{
-        ${node.body.map((inner) => context.sourceCode.getText(inner))}
-    }`)
-);
+const fix = (context, node) => (fixer) => {
+    if (node.type === 'BlockStatement') {
+        return fixer.replaceText(node, `{
+            ${node.body.map((inner) => context.sourceCode.getText(inner))}
+        }`);
+    }
 
-const fixCall = (context, node) => (fixer) => {
     const hasParentheses = context.sourceCode.getTokenBefore(node).value === '(';
 
     return fixer.replaceText(node, `${hasParentheses ? '' : '('}
         ${context.sourceCode.getText(node)}
     ${hasParentheses ? '' : ')'}`);
+};
+
+const findArrowFunctionParent = (item) => {
+    if (!item.parent) {
+        return null;
+    }
+
+    if (item.parent.type === 'ArrowFunctionExpression') {
+        return item.parent;
+    }
+
+    return findArrowFunctionParent(item.parent);
 };
 
 module.exports = {
@@ -27,35 +39,47 @@ module.exports = {
     },
     create: (context) => ({
         ArrowFunctionExpression: (node) => {
-            const parentTypes = ['VariableDeclarator', 'ExportDefaultDeclaration'];
-            const bodyTypesToIgnore = ['ArrayExpression', 'ObjectExpression'];
+            const arrowFunctionParent = findArrowFunctionParent(node);
 
-            if (parentTypes.includes(node.parent.type)) {
-                if (node.body.type === 'BlockStatement') {
-                    if (node.body.body[0].loc.start.line === node.parent.loc.start.line) {
-                        context.report({
-                            node,
-                            messageId: 'singleLineFunctionDeclaration',
-                            fix: fixBlock(context, node.body),
-                        });
-                    }
-                } else if (node.body.type === 'ArrowFunctionExpression') {
-                    if (node.parent.type === 'VariableDeclarator' && !node.parent.id.name.endsWith('Handler')) {
-                        if (node.body.loc.start.line === node.parent.loc.start.line) {
+            if (arrowFunctionParent) {
+                if (node.loc.start.line === arrowFunctionParent.loc.start.line) {
+                    if (node.parent === arrowFunctionParent) {
+                        if (arrowFunctionParent.parent.type === 'VariableDeclarator' && !arrowFunctionParent.parent.id.name.endsWith('Handler')) {
                             context.report({
                                 node,
                                 messageId: 'noHandlerSuffix',
-                                fix: fixCall(context, node.body),
+                                fix: fix(context, arrowFunctionParent.body),
                             });
                         }
-                    }
-                } else if (!bodyTypesToIgnore.includes(node.body.type)) {
-                    if (node.body.loc.start.line === node.parent.loc.start.line) {
+                    } else {
                         context.report({
                             node,
                             messageId: 'singleLineFunctionDeclaration',
-                            fix: fixCall(context, node.body),
+                            fix: fix(context, arrowFunctionParent.body),
                         });
+                    }
+                }
+            } else {
+                const parentTypes = ['VariableDeclarator', 'ExportDefaultDeclaration'];
+                const bodyTypesToIgnore = ['ArrayExpression', 'ObjectExpression', 'ArrowFunctionExpression'];
+
+                if (parentTypes.includes(node.parent.type)) {
+                    if (node.body.type === 'BlockStatement') {
+                        if (node.body.body[0].loc.start.line === node.parent.loc.start.line) {
+                            context.report({
+                                node,
+                                messageId: 'singleLineFunctionDeclaration',
+                                fix: fix(context, node.body),
+                            });
+                        }
+                    } else if (!bodyTypesToIgnore.includes(node.body.type)) {
+                        if (node.body.loc.start.line === node.parent.loc.start.line) {
+                            context.report({
+                                node,
+                                messageId: 'singleLineFunctionDeclaration',
+                                fix: fix(context, node.body),
+                            });
+                        }
                     }
                 }
             }
