@@ -44,6 +44,12 @@ ruleTester.run('no-single-line-function-declaration', rule, {
         `,
     }, {
         code: `
+            const func = () => (
+                \`templateLiteral\`
+            );
+        `,
+    }, {
+        code: `
             const func = call(() => callback());
         `,
     }, {

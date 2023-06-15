@@ -82,7 +82,10 @@ module.exports = {
                             });
                         }
                     } else if (bodyTypesToIgnore.includes(node.body.type)) {
-                        if (node.body.loc.start.line > node.parent.loc.start.line) {
+                        if (
+                            node.body.loc.start.line > node.parent.loc.start.line
+                            && node.body.loc.start.line < node.body.loc.end.line
+                        ) {
                             context.report({
                                 node,
                                 messageId: 'shouldBeSingleLine',
