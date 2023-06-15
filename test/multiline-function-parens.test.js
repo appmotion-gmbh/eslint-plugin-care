@@ -84,7 +84,7 @@ param3
                         );
         `,
         errors: [{
-            messageId: 'invalidLineBreaks',
+            messageId: 'shouldBeMultiLine',
         }],
     }, {
         code: `
@@ -100,7 +100,35 @@ param3
                         );
         `,
         errors: [{
-            messageId: 'invalidLineBreaks',
+            messageId: 'shouldBeMultiLine',
+        }],
+    }, {
+        code: `
+            someFunction(
+                param1
+            );
+        `,
+        output: `
+            someFunction(param1);
+        `,
+        errors: [{
+            messageId: 'shouldBeSingleLine',
+        }],
+    }, {
+        code: `
+            someFunction(
+                {
+                    someKey: 'someValue',
+                }
+            );
+        `,
+        output: `
+            someFunction({
+                    someKey: 'someValue',
+                });
+        `,
+        errors: [{
+            messageId: 'shouldBeSingleLine',
         }],
     }, {
         code: `
@@ -117,7 +145,7 @@ param3
                         );
         `,
         errors: [{
-            messageId: 'invalidLineBreaks',
+            messageId: 'shouldBeMultiLine',
         }],
     }, {
         code: `
@@ -132,7 +160,7 @@ param2
                         );
         `,
         errors: [{
-            messageId: 'invalidLineBreaks',
+            messageId: 'shouldBeMultiLine',
         }],
     }, {
         code: `
@@ -150,7 +178,7 @@ param3
                         );
         `,
         errors: [{
-            messageId: 'invalidLineBreaks',
+            messageId: 'shouldBeMultiLine',
         }],
     }, {
         code: `
@@ -171,7 +199,7 @@ param3
                         );
         `,
         errors: [{
-            messageId: 'invalidLineBreaks',
+            messageId: 'shouldBeMultiLine',
         }],
     }],
 });

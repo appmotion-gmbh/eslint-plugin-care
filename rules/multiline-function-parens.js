@@ -7,15 +7,16 @@ module.exports = {
             description: 'Enforce consistent line breaks for function arguments.',
         },
         messages: {
-            invalidLineBreaks: 'Place all arguments either in the same line or on separate lines if they are all single-line; place them on separate lines if at least one argument is multi-line.',
+            shouldBeSingleLine: 'Place the argument in the same line as the function call.',
+            shouldBeMultiLine: 'Place all arguments on separate lines.',
         },
     },
     create: (context) => ({
         CallExpression: (node) => {
             const exceptions = ['ArrowFunctionExpression', 'ObjectExpression', 'ArrayExpression', 'TemplateLiteral'];
-            const multiLineArgumentCount = node.arguments.some((argument) => (
+            const multiLineArgumentCount = node.arguments.filter((argument) => (
                 !exceptions.includes(argument.type) && argument.loc.start.line !== argument.loc.end.line
-            ));
+            )).length;
             const exceptionMultiLineArgumentCount = node.arguments.filter((argument) => (
                 exceptions.includes(argument.type) && argument.loc.start.line !== argument.loc.end.line
             )).length;
@@ -25,7 +26,7 @@ module.exports = {
             const argumentsWithoutLineBreakCount = node.arguments.filter((argument, index) => (
                 argument.loc.start.line === (node.arguments[index - 1] || node.callee).loc.end.line
             )).length;
-            const hasError = (
+            const shouldBeMultiLine = (
                 argumentsWithoutLineBreakCount > 0
                 && (
                     argumentsWithLineBreakCount > 0
@@ -37,15 +38,28 @@ module.exports = {
                     )
                 )
             );
+            const shouldBeSingleLine = (
+                node.arguments.length === 1
+                && argumentsWithLineBreakCount === 1
+                && multiLineArgumentCount === 0
+            );
 
-            if (hasError) {
+            if (shouldBeMultiLine) {
                 context.report({
                     node,
-                    messageId: 'invalidLineBreaks',
+                    messageId: 'shouldBeMultiLine',
                     fix: (fixer) => (
                         fixer.replaceText(node, `${context.sourceCode.getText(node.callee)}(
-                            ${node.arguments.map((argument, index) => `${context.sourceCode.getText(argument)}${index === node.arguments.length - 1 ? '' : ','}`).join('\n')}
+                            ${node.arguments.map((argument) => context.sourceCode.getText(argument)).join(',\n')}
                         )`)
+                    ),
+                });
+            } else if (shouldBeSingleLine) {
+                context.report({
+                    node,
+                    messageId: 'shouldBeSingleLine',
+                    fix: (fixer) => (
+                        fixer.replaceText(node, `${context.sourceCode.getText(node.callee)}(${context.sourceCode.getText(node.arguments[0])})`)
                     ),
                 });
             }
