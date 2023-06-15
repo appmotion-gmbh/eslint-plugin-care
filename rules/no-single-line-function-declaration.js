@@ -70,7 +70,7 @@ module.exports = {
                 }
             } else {
                 const parentTypes = ['VariableDeclarator', 'ExportDefaultDeclaration'];
-                const bodyTypesToIgnore = ['ArrayExpression', 'ObjectExpression', 'TemplateLiteral', 'ArrowFunctionExpression'];
+                const singleLineBodyTypes = ['ArrayExpression', 'ObjectExpression', 'TemplateLiteral'];
 
                 if (parentTypes.includes(node.parent.type)) {
                     if (node.body.type === 'BlockStatement') {
@@ -81,7 +81,9 @@ module.exports = {
                                 fix: fix(context, node.body),
                             });
                         }
-                    } else if (bodyTypesToIgnore.includes(node.body.type)) {
+                    } else if (node.body.type === 'ArrowFunctionExpression') {
+                        // Do nothing
+                    } else if (singleLineBodyTypes.includes(node.body.type)) {
                         if (
                             node.body.loc.start.line > node.parent.loc.start.line
                             && node.body.loc.start.line < node.body.loc.end.line

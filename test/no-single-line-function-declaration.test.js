@@ -60,6 +60,14 @@ ruleTester.run('no-single-line-function-declaration', rule, {
         `,
     }, {
         code: `
+            const func = () => (
+                () => (
+                    someCode()
+                )
+            );
+        `,
+    }, {
+        code: `
             const funcWithSuffixOfHandler = () => () => (
                 someCode()
             );
