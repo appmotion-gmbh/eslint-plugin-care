@@ -1,8 +1,16 @@
-const fix = (context, node) => (fixer) => {
+const fix = (context, node, singleLine = false) => (fixer) => {
     if (node.type === 'BlockStatement') {
         return fixer.replaceText(node, `{
             ${node.body.map((inner) => context.sourceCode.getText(inner))}
         }`);
+    }
+
+    if (singleLine) {
+        const body = node.body.type === 'ObjectExpression'
+            ? `(${context.sourceCode.getText(node.body)})`
+            : context.sourceCode.getText(node.body);
+
+        return fixer.replaceText(node, `(${node.params.map((param) => context.sourceCode.getText(param)).join(', ')}) => ${body}`);
     }
 
     const hasParentheses = context.sourceCode.getTokenBefore(node).value === '(';
@@ -34,7 +42,8 @@ module.exports = {
         },
         messages: {
             noHandlerSuffix: 'Place function body on a separate line from the head or use the "Handler" suffix in the function name.',
-            singleLineFunctionDeclaration: 'Place function body on a separate line from the head.',
+            shouldBeMultiLine: 'Place function body on a separate line from the head.',
+            shouldBeSingleLine: 'Place function body on the same line as the head.',
         },
     },
     create: (context) => ({
@@ -54,7 +63,7 @@ module.exports = {
                     } else {
                         context.report({
                             node,
-                            messageId: 'singleLineFunctionDeclaration',
+                            messageId: 'shouldBeMultiLine',
                             fix: fix(context, arrowFunctionParent.body),
                         });
                     }
@@ -68,18 +77,24 @@ module.exports = {
                         if (node.body.body[0].loc.start.line === node.parent.loc.start.line) {
                             context.report({
                                 node,
-                                messageId: 'singleLineFunctionDeclaration',
+                                messageId: 'shouldBeMultiLine',
                                 fix: fix(context, node.body),
                             });
                         }
-                    } else if (!bodyTypesToIgnore.includes(node.body.type)) {
-                        if (node.body.loc.start.line === node.parent.loc.start.line) {
+                    } else if (bodyTypesToIgnore.includes(node.body.type)) {
+                        if (node.body.loc.start.line > node.parent.loc.start.line) {
                             context.report({
                                 node,
-                                messageId: 'singleLineFunctionDeclaration',
-                                fix: fix(context, node.body),
+                                messageId: 'shouldBeSingleLine',
+                                fix: fix(context, node, true),
                             });
                         }
+                    } else if (node.body.loc.start.line === node.parent.loc.start.line) {
+                        context.report({
+                            node,
+                            messageId: 'shouldBeMultiLine',
+                            fix: fix(context, node.body),
+                        });
                     }
                 }
             }

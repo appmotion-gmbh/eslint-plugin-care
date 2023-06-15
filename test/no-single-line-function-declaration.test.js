@@ -69,7 +69,7 @@ ruleTester.run('no-single-line-function-declaration', rule, {
     );
         `,
         errors: [{
-            messageId: 'singleLineFunctionDeclaration',
+            messageId: 'shouldBeMultiLine',
         }],
     }, {
         code: `
@@ -81,7 +81,55 @@ ruleTester.run('no-single-line-function-declaration', rule, {
     );
         `,
         errors: [{
-            messageId: 'singleLineFunctionDeclaration',
+            messageId: 'shouldBeMultiLine',
+        }],
+    }, {
+        code: `
+            const func = () => (
+                {
+                    someKey: someValue
+                }
+            );
+        `,
+        output: `
+            const func = () => ({
+                    someKey: someValue
+                });
+        `,
+        errors: [{
+            messageId: 'shouldBeSingleLine',
+        }],
+    }, {
+        code: `
+            const func = () => (
+                [
+                    someArrayItem
+                ]
+            );
+        `,
+        output: `
+            const func = () => [
+                    someArrayItem
+                ];
+        `,
+        errors: [{
+            messageId: 'shouldBeSingleLine',
+        }],
+    }, {
+        code: `
+            const func = () => (
+                \`
+                    templateLiteral
+                \`
+            );
+        `,
+        output: `
+            const func = () => \`
+                    templateLiteral
+                \`;
+        `,
+        errors: [{
+            messageId: 'shouldBeSingleLine',
         }],
     }, {
         code: `
@@ -109,7 +157,7 @@ ruleTester.run('no-single-line-function-declaration', rule, {
         };
         `,
         errors: [{
-            messageId: 'singleLineFunctionDeclaration',
+            messageId: 'shouldBeMultiLine',
         }],
     }, {
         code: `
@@ -121,7 +169,7 @@ ruleTester.run('no-single-line-function-declaration', rule, {
     );
         `,
         errors: [{
-            messageId: 'singleLineFunctionDeclaration',
+            messageId: 'shouldBeMultiLine',
         }],
     }, {
         code: `
@@ -137,7 +185,7 @@ ruleTester.run('no-single-line-function-declaration', rule, {
     ));
         `,
         errors: [{
-            messageId: 'singleLineFunctionDeclaration',
+            messageId: 'shouldBeMultiLine',
         }],
     }],
 });
