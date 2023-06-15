@@ -12,7 +12,7 @@ module.exports = {
     },
     create: (context) => ({
         CallExpression: (node) => {
-            const exceptions = ['ArrowFunctionExpression', 'ObjectExpression', 'ArrayExpression'];
+            const exceptions = ['ArrowFunctionExpression', 'ObjectExpression', 'ArrayExpression', 'TemplateLiteral'];
             const multiLineArgumentCount = node.arguments.some((argument) => (
                 !exceptions.includes(argument.type) && argument.loc.start.line !== argument.loc.end.line
             ));

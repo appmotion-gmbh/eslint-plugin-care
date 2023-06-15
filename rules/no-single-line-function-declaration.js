@@ -61,7 +61,7 @@ module.exports = {
                 }
             } else {
                 const parentTypes = ['VariableDeclarator', 'ExportDefaultDeclaration'];
-                const bodyTypesToIgnore = ['ArrayExpression', 'ObjectExpression', 'ArrowFunctionExpression'];
+                const bodyTypesToIgnore = ['ArrayExpression', 'ObjectExpression', 'TemplateLiteral', 'ArrowFunctionExpression'];
 
                 if (parentTypes.includes(node.parent.type)) {
                     if (node.body.type === 'BlockStatement') {

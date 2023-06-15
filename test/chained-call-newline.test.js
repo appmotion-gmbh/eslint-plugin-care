@@ -90,7 +90,7 @@ ruleTester.run('chained-call-newline', rule, {
 .e();
         `,
         errors: [{
-            messageId: 'chainedCallNewline',
+            messageId: 'separate',
         }],
     }, {
         code: `
@@ -107,7 +107,7 @@ ruleTester.run('chained-call-newline', rule, {
 .e();
         `,
         errors: [{
-            messageId: 'chainedCallNewline',
+            messageId: 'separate',
         }],
     }, {
         code: `
@@ -126,7 +126,7 @@ ruleTester.run('chained-call-newline', rule, {
                 .e();
         `,
         errors: [{
-            messageId: 'chainedCallNewline',
+            messageId: 'separate',
         }],
     }, {
         code: `
@@ -143,7 +143,7 @@ ruleTester.run('chained-call-newline', rule, {
                 .e();
         `,
         errors: [{
-            messageId: 'chainedCallNewline',
+            messageId: 'separate',
         }],
     }, {
         code: `
@@ -160,7 +160,7 @@ ruleTester.run('chained-call-newline', rule, {
                 ));
         `,
         errors: [{
-            messageId: 'chainedCallNewline',
+            messageId: 'separate',
         }],
     }, {
         code: `
@@ -173,7 +173,18 @@ ruleTester.run('chained-call-newline', rule, {
                 .c();
         `,
         errors: [{
-            messageId: 'chainedCallNewline',
+            messageId: 'separate',
+        }],
+    }, {
+        code: `
+            const foo = a.b
+                .c();
+        `,
+        output: `
+            const foo = a.b.c();
+        `,
+        errors: [{
+            messageId: 'together',
         }],
     }],
 });

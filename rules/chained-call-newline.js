@@ -7,7 +7,8 @@ module.exports = {
             description: 'Enforce consistent call expression line breaks.',
         },
         messages: {
-            chainedCallNewline: 'Place each chained call on a separate line.',
+            separate: 'Place each chained call on a separate line.',
+            together: 'Place the chained call on the same line as the member object.',
         },
     },
     create: (context) => ({
@@ -21,9 +22,12 @@ module.exports = {
             let hasMultilineCallToFix = false;
             const path = [];
             let expressionsToFix = [];
+            let callExpressionParentCount = 0;
 
             while (parent && ['CallExpression', 'MemberExpression'].includes(parent.type)) {
                 if (parent.type === 'CallExpression') {
+                    callExpressionParentCount += 1;
+
                     const isFirstLine = parent.callee.loc.end.line === node.loc.start.line;
                     const isMultilineCall = parent.callee.loc.end.line !== parent.loc.end.line;
                     const hasNextInChainOnSameLineOrIsLastInChain = (
@@ -71,13 +75,23 @@ module.exports = {
             if (expressionsToFix.length > 0) {
                 context.report({
                     node,
-                    messageId: 'chainedCallNewline',
+                    messageId: 'separate',
                     fix: (fixer) => (
                         expressionsToFix.map((item) => (
                             fixer.insertTextBefore(context.sourceCode.getTokenAfter(item), '\n')
                         ))
                     ),
                 });
+            } else if (callExpressionParentCount === 1) {
+                if (node.callee.type === 'MemberExpression' && node.callee.property.loc.start.line > node.callee.object.loc.end.line) {
+                    context.report({
+                        node,
+                        messageId: 'together',
+                        fix: (fixer) => (
+                            fixer.replaceText(node.callee, `${context.sourceCode.getText(node.callee.object)}.${context.sourceCode.getText(node.callee.property)}`)
+                        ),
+                    });
+                }
             }
         },
     }),

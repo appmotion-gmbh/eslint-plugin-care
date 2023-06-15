@@ -64,6 +64,12 @@ ruleTester.run('multiline-function-parens', rule, {
                 'someValue',
             ], param2);
         `,
+    }, {
+        code: `
+            someFunction(\`
+                templateLiteral
+            \`);
+        `,
     }],
     invalid: [{
         code: `
