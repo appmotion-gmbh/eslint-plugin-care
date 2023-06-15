@@ -76,6 +76,12 @@ ruleTester.run('chained-call-newline', rule, {
                 multiline()
             ));
         `,
+    }, {
+        code: `
+            const foo = [
+                item
+            ].call();
+        `,
     }],
     invalid: [{
         code: `

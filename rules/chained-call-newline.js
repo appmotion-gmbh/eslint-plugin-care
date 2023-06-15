@@ -22,11 +22,11 @@ module.exports = {
             let hasMultilineCallToFix = false;
             const path = [];
             let expressionsToFix = [];
-            let callExpressionParentCount = 0;
+            let callExpressionCount = 0;
 
             while (parent && ['CallExpression', 'MemberExpression'].includes(parent.type)) {
                 if (parent.type === 'CallExpression') {
-                    callExpressionParentCount += 1;
+                    callExpressionCount += 1;
 
                     const isFirstLine = parent.callee.loc.end.line === node.loc.start.line;
                     const isMultilineCall = parent.callee.loc.end.line !== parent.loc.end.line;
@@ -46,8 +46,12 @@ module.exports = {
                         || (isMultilineCallChain && parent.loc.end.line === parent.callee.object?.loc.end.line)
                     ) {
                         const allowedSingleLineChains = ['Object', 'Array'];
+                        const allowedMultiLineParents = ['ObjectExpression', 'ArrayExpression'];
 
-                        if (!allowedSingleLineChains.includes(parent.callee.object.name)) {
+                        if (
+                            !allowedSingleLineChains.includes(parent.callee.object.name)
+                            && !allowedMultiLineParents.includes(parent.callee.object.type)
+                        ) {
                             path.push(parent.callee.object);
                         }
                     }
@@ -82,7 +86,7 @@ module.exports = {
                         ))
                     ),
                 });
-            } else if (callExpressionParentCount === 1) {
+            } else if (callExpressionCount === 1) {
                 if (node.callee.type === 'MemberExpression' && node.callee.property.loc.start.line > node.callee.object.loc.end.line) {
                     context.report({
                         node,
