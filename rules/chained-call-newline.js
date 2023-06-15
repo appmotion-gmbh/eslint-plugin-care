@@ -87,7 +87,10 @@ module.exports = {
                     ),
                 });
             } else if (callExpressionCount === 1) {
-                if (node.callee.type === 'MemberExpression' && node.callee.property.loc.start.line > node.callee.object.loc.end.line) {
+                if (
+                    node.callee.type === 'MemberExpression'
+                    && node.callee.property.loc.start.line - node.loc.start.line === 1
+                ) {
                     context.report({
                         node,
                         messageId: 'together',

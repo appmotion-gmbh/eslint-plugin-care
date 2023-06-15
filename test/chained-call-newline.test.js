@@ -30,6 +30,12 @@ ruleTester.run('chained-call-newline', rule, {
     }, {
         code: `
             const foo = a
+                .b
+                .c();
+        `,
+    }, {
+        code: `
+            const foo = a
                 .b()
                 .c
                 .d()
