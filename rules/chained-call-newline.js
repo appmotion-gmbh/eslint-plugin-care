@@ -49,7 +49,7 @@ module.exports = {
                         const allowedMultiLineParents = ['ObjectExpression', 'ArrayExpression'];
 
                         if (
-                            !allowedSingleLineChains.includes(parent.callee.object.name)
+                            !allowedSingleLineChains.includes(parent.callee.object.name || parent.callee.object.callee?.name)
                             && !allowedMultiLineParents.includes(parent.callee.object.type)
                         ) {
                             path.push(parent.callee.object);

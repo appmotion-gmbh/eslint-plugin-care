@@ -84,6 +84,12 @@ ruleTester.run('chained-call-newline', rule, {
         `,
     }, {
         code: `
+            const foo = Array(3).fill(null).map(() => (
+                multiline()
+            ));
+        `,
+    }, {
+        code: `
             const foo = [
                 item
             ].call();
