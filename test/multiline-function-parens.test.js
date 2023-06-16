@@ -50,11 +50,27 @@ ruleTester.run('multiline-function-parens', rule, {
         code: `
             someFunction({
                 someKey: 'someValue',
+            }, {
+                someKey: 'someValue',
+            });
+        `,
+    }, {
+        code: `
+            someFunction({
+                someKey: 'someValue',
             }, param2);
         `,
     }, {
         code: `
             someFunction([
+                'someValue',
+            ]);
+        `,
+    }, {
+        code: `
+            someFunction([
+                'someValue',
+            ], [
                 'someValue',
             ]);
         `,

@@ -14,11 +14,15 @@ module.exports = {
     create: (context) => ({
         CallExpression: (node) => {
             const exceptions = ['ArrowFunctionExpression', 'ObjectExpression', 'ArrayExpression', 'TemplateLiteral'];
+            const singleArgumentExceptions = ['ArrowFunctionExpression', 'TemplateLiteral'];
             const multiLineArgumentCount = node.arguments.filter((argument) => (
                 !exceptions.includes(argument.type) && argument.loc.start.line !== argument.loc.end.line
             )).length;
             const exceptionMultiLineArgumentCount = node.arguments.filter((argument) => (
                 exceptions.includes(argument.type) && argument.loc.start.line !== argument.loc.end.line
+            )).length;
+            const singleArgumentExceptionMultiLineArgumentCount = node.arguments.filter((argument) => (
+                singleArgumentExceptions.includes(argument.type) && argument.loc.start.line !== argument.loc.end.line
             )).length;
             const argumentsWithLineBreakCount = node.arguments.filter((argument, index) => (
                 argument.loc.start.line > (node.arguments[index - 1] || node.callee).loc.end.line
@@ -31,7 +35,7 @@ module.exports = {
                 && (
                     argumentsWithLineBreakCount > 0
                     || multiLineArgumentCount > 0
-                    || exceptionMultiLineArgumentCount > 1
+                    || singleArgumentExceptionMultiLineArgumentCount > 1
                     || (
                         exceptionMultiLineArgumentCount > 0
                         && argumentsWithoutLineBreakCount > 2
