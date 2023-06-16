@@ -42,6 +42,14 @@ ruleTester.run('logical-indent', rule, {
     }, {
         code: `
             const foo = (
+                a
+                && (b || c)
+                && (d || e)
+            )
+        `,
+    }, {
+        code: `
+            const foo = (
                 (
                     a
                     || b
@@ -83,38 +91,6 @@ ruleTester.run('logical-indent', rule, {
             const foo = (
                 a
                 && b
-            )
-        `,
-        errors: [{
-            messageId: 'invalidIndent',
-        }],
-    }, {
-        code: `
-            const foo = (
-                a &&
-            b
-            )
-        `,
-        output: `
-            const foo = (
-                a &&
-                b
-            )
-        `,
-        errors: [{
-            messageId: 'invalidIndent',
-        }],
-    }, {
-        code: `
-            const foo = (
-                a &&
-                    b
-            )
-        `,
-        output: `
-            const foo = (
-                a &&
-                b
             )
         `,
         errors: [{

@@ -13,23 +13,22 @@ module.exports = {
     create: (context) => ({
         LogicalExpression: (node) => {
             if (node.left.loc.start.line < node.right.loc.start.line) {
+                const { lines } = context.sourceCode;
                 const operatorToken = context
                     .getSourceCode()
                     .getTokensBetween(node.left, node.right)
                     .find(({ value }) => value === node.operator);
                 const tokenBeforeOperator = context.getSourceCode().getTokenBefore(operatorToken);
-                const tokenAfterOperator = context.getSourceCode().getTokenAfter(operatorToken);
+                const left = tokenBeforeOperator.value === ')' ? tokenBeforeOperator : node.left;
 
-                if (
-                    operatorToken.loc.start.line === tokenBeforeOperator.loc.start.line
-                    && operatorToken.loc.start.line === tokenAfterOperator.loc.start.line
-                ) {
+                if (operatorToken.loc.start.line === left.loc.start.line) {
                     return;
                 }
 
-                const right = operatorToken.loc.start.line === tokenBeforeOperator.loc.start.line ? tokenAfterOperator : operatorToken;
-                const left = tokenBeforeOperator;
-                const columnDifference = right.loc.start.column - left.loc.start.column;
+                const right = operatorToken;
+                const spacesRight = lines[right.loc.start.line - 1].search(/\S/);
+                const spacesLeft = lines[left.loc.start.line - 1].search(/\S/);
+                const columnDifference = spacesRight - spacesLeft;
 
                 if (columnDifference !== 0) {
                     context.report({
