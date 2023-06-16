@@ -38,8 +38,8 @@ module.exports = {
                         },
                         messageId: 'invalidIndent',
                         data: {
-                            expected: right.loc.start.column - columnDifference,
-                            found: right.loc.start.column,
+                            expected: spacesLeft,
+                            found: spacesRight,
                         },
                         fix: (fixer) => {
                             const range = [right.range[0] - right.loc.start.column, right.range[0]];
