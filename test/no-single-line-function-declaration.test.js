@@ -15,6 +15,12 @@ ruleTester.run('no-single-line-function-declaration', rule, {
     valid: [{
         code: `
             const func = () => {
+
+            };
+        `,
+    }, {
+        code: `
+            const func = () => {
                 someCode();
             };
         `,

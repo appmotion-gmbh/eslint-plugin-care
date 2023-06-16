@@ -38,7 +38,7 @@ module.exports = {
                         },
                         messageId: 'invalidIndent',
                         data: {
-                            expected: right.loc.start.column + columnDifference,
+                            expected: right.loc.start.column - columnDifference,
                             found: right.loc.start.column,
                         },
                         fix: (fixer) => {

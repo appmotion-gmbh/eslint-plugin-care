@@ -73,7 +73,7 @@ module.exports = {
                 const singleLineBodyTypes = ['ArrayExpression', 'ObjectExpression', 'TemplateLiteral'];
 
                 if (parentTypes.includes(node.parent.type)) {
-                    if (node.body.type === 'BlockStatement') {
+                    if (node.body.type === 'BlockStatement' && node.body.body.length > 0) {
                         if (node.body.body[0].loc.start.line === node.parent.loc.start.line) {
                             context.report({
                                 node,
