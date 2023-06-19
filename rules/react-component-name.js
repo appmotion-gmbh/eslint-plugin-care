@@ -6,14 +6,18 @@ module.exports = {
         fixable: 'code',
         schema: [],
         docs: {
-            description: 'Enforce correct BEM usage in React components.',
+            description: 'Enforce matching React component names and filenames.',
         },
         messages: {
             componentName: 'The component name must match the filename.',
         },
     },
     create: (context) => {
-        const filename = path.basename(context.physicalFilename, path.extname(context.physicalFilename));
+        if (!context.filename) {
+            return {};
+        }
+
+        const filename = path.basename(context.filename, path.extname(context.filename));
 
         return {
             ':matches(Program > VariableDeclaration > VariableDeclarator > Identifier)': (node) => {

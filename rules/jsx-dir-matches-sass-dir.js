@@ -85,7 +85,7 @@ module.exports = {
                     return;
                 }
 
-                const jsxDirectory = context.physicalFilename.replace(`${context.cwd}/client/script/`, '');
+                const jsxDirectory = context.filename.replace(`${context.cwd}/client/script/`, '');
 
                 if (!jsxDirectory.startsWith('components/')) {
                     return;
