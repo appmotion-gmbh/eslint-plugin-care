@@ -13,7 +13,7 @@ module.exports = {
         },
     },
     create: (context) => {
-        const filename = path.basename(context.filename, path.extname(context.filename));
+        const filename = path.basename(context.physicalFilename, path.extname(context.physicalFilename));
 
         return {
             ':matches(Program > VariableDeclaration > VariableDeclarator > Identifier)': (node) => {
