@@ -30,11 +30,15 @@ module.exports = {
             const argumentsWithoutLineBreakCount = node.arguments.filter((argument, index) => (
                 argument.loc.start.line === (node.arguments[index - 1] || node.callee).loc.end.line
             )).length;
+            const jsxArgumentCount = node.arguments.filter((argument) => (
+                argument.type === 'JSXElement'
+            )).length;
             const shouldBeMultiLine = (
                 argumentsWithoutLineBreakCount > 0
                 && (
                     argumentsWithLineBreakCount > 0
                     || multiLineArgumentCount > 0
+                    || jsxArgumentCount > 0
                     || singleArgumentExceptionMultiLineArgumentCount > 1
                     || (
                         exceptionMultiLineArgumentCount > 0
@@ -46,6 +50,7 @@ module.exports = {
                 node.arguments.length === 1
                 && argumentsWithLineBreakCount === 1
                 && multiLineArgumentCount === 0
+                && jsxArgumentCount === 0
             );
 
             if (shouldBeMultiLine) {

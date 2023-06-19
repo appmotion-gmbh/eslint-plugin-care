@@ -4,6 +4,9 @@ const rule = require('../rules/multiline-function-parens');
 const ruleTester = new RuleTester({
     parserOptions: {
         ecmaVersion: 2015,
+        ecmaFeatures: {
+            jsx: true,
+        },
     },
 });
 
@@ -85,6 +88,12 @@ ruleTester.run('multiline-function-parens', rule, {
             someFunction(\`
                 templateLiteral
             \`);
+        `,
+    }, {
+        code: `
+            someFunction(
+                <div />
+            );
         `,
     }],
     invalid: [{
@@ -212,6 +221,18 @@ param3
 (callbackParam) => (
                 stuff()
             )
+                        );
+        `,
+        errors: [{
+            messageId: 'shouldBeMultiLine',
+        }],
+    }, {
+        code: `
+            someFunction(<div />);
+        `,
+        output: `
+            someFunction(
+                            <div />
                         );
         `,
         errors: [{
