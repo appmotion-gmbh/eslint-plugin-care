@@ -159,6 +159,12 @@ ruleTester.run('jsx-bem', rule, {
         `,
     }, {
         code: `
+            const Block = (props) => (
+                <div className={props.className} />
+            );
+        `,
+    }, {
+        code: `
             const Block = () => (
                 <div className={classNames('block', \`block--\${modifier}\`, { 'block--mod': true })}>
                     <div className={classNames('block__element', \`block__element--\${modifier}\`, { 'block__element--mod': true })} />

@@ -13,7 +13,7 @@ module.exports = (node) => {
         }));
     }
 
-    if (node.type === 'JSXExpressionContainer') {
+    if (node.type === 'JSXExpressionContainer' && node.expression.type === 'CallExpression') {
         return node.expression.arguments.reduce((result, argument) => {
             if (argument.type === 'Literal') {
                 return [

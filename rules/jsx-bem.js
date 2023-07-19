@@ -108,10 +108,13 @@ module.exports = {
                     return;
                 }
 
-                jsxAttributes.push({
-                    node,
-                    classNames: findClassNames(node.value),
-                });
+                const classNames = findClassNames(node.value);
+
+                if (classNames.length === 0) {
+                    return;
+                }
+
+                jsxAttributes.push({ node, classNames });
             },
             'Program:exit': () => {
                 const { rootElements, childElements } = jsxAttributes.reduce((result, element) => (
