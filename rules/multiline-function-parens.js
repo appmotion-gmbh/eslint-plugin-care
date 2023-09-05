@@ -46,6 +46,7 @@ module.exports = {
                     )
                 )
             );
+            const callee = node.callee.property || node.callee;
             const shouldBeSingleLine = (
                 (
                     node.arguments.length === 1
@@ -57,7 +58,7 @@ module.exports = {
                     argumentsWithLineBreakCount === 0
                     && multiLineArgumentCount === 0
                     && exceptionMultiLineArgumentCount === 0
-                    && node.loc.start.line < node.loc.end.line
+                    && callee.loc.start.line < node.loc.end.line
                 )
             );
 
