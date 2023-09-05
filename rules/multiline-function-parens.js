@@ -47,10 +47,18 @@ module.exports = {
                 )
             );
             const shouldBeSingleLine = (
-                node.arguments.length === 1
-                && argumentsWithLineBreakCount === 1
-                && multiLineArgumentCount === 0
-                && jsxArgumentCount === 0
+                (
+                    node.arguments.length === 1
+                    && argumentsWithLineBreakCount === 1
+                    && multiLineArgumentCount === 0
+                    && jsxArgumentCount === 0
+                )
+                || (
+                    argumentsWithLineBreakCount === 0
+                    && multiLineArgumentCount === 0
+                    && exceptionMultiLineArgumentCount === 0
+                    && node.loc.start.line < node.loc.end.line
+                )
             );
 
             if (shouldBeMultiLine) {
@@ -68,7 +76,7 @@ module.exports = {
                     node,
                     messageId: 'shouldBeSingleLine',
                     fix: (fixer) => (
-                        fixer.replaceText(node, `${context.sourceCode.getText(node.callee)}(${context.sourceCode.getText(node.arguments[0])})`)
+                        fixer.replaceText(node, `${context.sourceCode.getText(node.callee)}(${node.arguments.map((argument) => context.sourceCode.getText(argument)).join(', ')})`)
                     ),
                 });
             }

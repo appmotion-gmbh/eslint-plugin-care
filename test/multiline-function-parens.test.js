@@ -141,6 +141,28 @@ param3
         }],
     }, {
         code: `
+            someFunction(param1, param2
+            );
+        `,
+        output: `
+            someFunction(param1, param2);
+        `,
+        errors: [{
+            messageId: 'shouldBeSingleLine',
+        }],
+    }, {
+        code: `
+            someFunction(
+                param1);
+        `,
+        output: `
+            someFunction(param1);
+        `,
+        errors: [{
+            messageId: 'shouldBeSingleLine',
+        }],
+    }, {
+        code: `
             someFunction(
                 {
                     someKey: 'someValue',
