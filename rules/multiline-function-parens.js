@@ -1,3 +1,13 @@
+const calleeText = (context, node) => {
+    const text = context.sourceCode.getText(node.callee);
+
+    if (node.callee.type === 'ArrowFunctionExpression') {
+        return `(${text})`;
+    }
+
+    return text;
+};
+
 module.exports = {
     meta: {
         type: 'layout',
@@ -58,7 +68,7 @@ module.exports = {
                     argumentsWithLineBreakCount === 0
                     && multiLineArgumentCount === 0
                     && exceptionMultiLineArgumentCount === 0
-                    && callee.loc.start.line < node.loc.end.line
+                    && callee.loc.end.line < node.loc.end.line
                 )
             );
 
@@ -67,7 +77,7 @@ module.exports = {
                     node,
                     messageId: 'shouldBeMultiLine',
                     fix: (fixer) => (
-                        fixer.replaceText(node, `${context.sourceCode.getText(node.callee)}(
+                        fixer.replaceText(node, `${calleeText(context, node)}(
                             ${node.arguments.map((argument) => context.sourceCode.getText(argument)).join(',\n')}
                         )`)
                     ),
@@ -77,7 +87,7 @@ module.exports = {
                     node,
                     messageId: 'shouldBeSingleLine',
                     fix: (fixer) => (
-                        fixer.replaceText(node, `${context.sourceCode.getText(node.callee)}(${node.arguments.map((argument) => context.sourceCode.getText(argument)).join(', ')})`)
+                        fixer.replaceText(node, `${calleeText(context, node)}(${node.arguments.map((argument) => context.sourceCode.getText(argument)).join(', ')})`)
                     ),
                 });
             }

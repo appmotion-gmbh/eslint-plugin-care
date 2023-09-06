@@ -3,7 +3,7 @@ const rule = require('../rules/multiline-function-parens');
 
 const ruleTester = new RuleTester({
     parserOptions: {
-        ecmaVersion: 2015,
+        ecmaVersion: 6,
         ecmaFeatures: {
             jsx: true,
         },
@@ -99,6 +99,12 @@ ruleTester.run('multiline-function-parens', rule, {
             someFunction(
                 <div />
             );
+        `,
+    }, {
+        code: `
+            (() => {
+                someFunction();
+            })();
         `,
     }],
     invalid: [{
